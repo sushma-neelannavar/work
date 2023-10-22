@@ -1,0 +1,8 @@
+https://169556384798.signin.aws.amazon.com/console
+
+access key -- AKIASO6SZDQPFGW25A76
+
+pwd -- vEWmwsKBuW4k+bVQnopkcMlUx5axE1kv4GlEANla
+
+
+aws s3api create-bucket     --bucket myy-bucket0415     --region ap-south-1 --create-bucket-configuration LocationConstraint=ap-south-1
