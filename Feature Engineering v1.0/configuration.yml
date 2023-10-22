@@ -1,0 +1,30 @@
+SourceSinkConfiguration:
+    sourceyaml: /data/bdpq/arl/01/data/landingzone/mtg_analytics/test
+    sourceCategory: database
+    sourceType: hive
+    sourceSpecification:
+      env:
+      url:
+      userid:
+      password:
+      schema:
+
+
+    sinkCategory: database
+    sinkType:  # supports more than one type of sink hive for offline store, oracle for online store
+      - hive
+      - oracle
+    sinkSpecification:
+      - type: hive
+        env:
+          url:
+          userid:
+          password:
+          schema:
+      - type: oracle
+        env:
+          url:
+          userid:
+          passwrod:
+          schema:
+          

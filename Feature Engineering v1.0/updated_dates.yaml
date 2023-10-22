@@ -1,0 +1,6 @@
+crf_agg_date: SELECT max(load_date) from CUST_AGG
+fdr_frmt_date: SELECT max(load_date) from FDR_FRMT
+fdr_master_date: SELECT max(load_date) from FDR_MASTER
+feat_data_date: SELECT max(load_date) from FEAT_DATA
+feat_op_date: SELECT max(load_date) from FEAT_OUTPUT
+mdm_date: SELECT max(load_date) from MDM

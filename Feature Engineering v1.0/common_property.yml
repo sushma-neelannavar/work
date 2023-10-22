@@ -1,0 +1,159 @@
+featureEngineering:
+  featureComputeLogic:
+    computeLogicType: sparkSQL
+    logicFor: customerProfileMonthly
+
+
+  feature_logic:
+    - featurename: balancechange         # name of the feature
+      version: 1
+      status: 1                          # 1 for active and 0 for non active
+      queries:                           # list of queries to drive the features
+        - name: balancechange_df
+          sql: "SELECT mdm_key, cif_hloc_key, hive_load_date as hive_load_date, curr_bal_dda, curr_bal_sav FROM
+          arlhd01q_arl_idl.customer_rltnshp_aggregated WHERE hive_load_date = '2023-08-02' OR
+          hive_load_date = add_months(to_date('2023-08-02'), -3)"
+
+        - name: balancechange_df1
+          sql: "SELECT distinct A.mdm_key as mdm, to_date(B.time_period, 'ddMMMyyyy') as time_period, sv_bal as sav_bal_hh,
+          dd_bal as dd_bal_hh, income_na, income_19, income_20_39, income_40_74, income_75_124, income_125, married_na,
+          married_1m, married_1s, child_yes FROM balanchange_df A LEFT JOIN arlhd01q_arl_stg.chf_details B ON
+          B.rlb_location_key = A.cif_hloc_key WHERE to_date(B.time_period, 'ddMMMyyyy')> '2022-09-29'"
+
+        - name: balancechange_df2
+          sql: "SELECT * from balancechange_df order by mdm_key, hive_load_date"
+
+        - name : balancechange_df3
+          sql : "SELECT mdm_key, last(curr_bal_sav), asindivSavingsCurr, first(curr_bal_sav) as indivSavings3m,
+          last(curr_bal_dda) as indivDDACurr, first(curr_bal_dda) as indivDDA3m from balancechange_df2 group by
+          mdm_key"
+
+        - name : balancechange_df4
+          sql : "SELECT *, round(indivSavingsCurr - indivSavings3m),2) as indivSavings3mDiff,
+          round(indivDDACurr - indivDDA3m),2) as indivDDA3mDiff from balancechange_df3"
+
+        - name : balancechange_df5
+          sql : "SELECT *, CASE WHEN abs(indivSavings3mDiff / indivSavings3m) >0.1 THEN 1 ELSE 0 END AS
+          indivSavChgGr10pct3m, CASE WHEN abs( indivDDA3mDiff / indivDDA3m) > 0.1 THEN 1 ELSE 0 END AS
+          indivDDAChgGr10pct3m from balancechange_df4"
+
+        - name : balancechange_df6
+          sql : "SELECT mdm, time_period, sav_bal_hh, dd_bal_hh, row_number() over(partition by mdm
+          order by time_period) as row_number from balancechange_df1"
+
+        - name : balancechange_df7
+          sql: "SELECT * FROM balancechange_df6 where row_number = 2 OR row_number = 3"
+
+        - name : balancechange_df8
+          sql : "SELECT mdm, last_value(sav_bal_hh) as hhSavingsCurr, first_value(sav_bal_hh) as hhSavings3m,
+          last_value(dd_bal_hh) as hhDDACurr, first_value('dd_bal_hh') as hhDDA3m from balancechange_df7
+          group by mdm"
+
+        - name : balancechange_df9
+          sql : "SELECT *, round((hhSavingsCurr - hhSavings3m), 2) as hhSavings3mDiff,
+          round((hhDDACurr-hhDDA3m),2) as hhDDA3mDiff from balancechange_df8"
+
+        - name : balancechange_df10
+          sql : "SELECT *, CASE WHEN abs(hhSavings3mDiff / hhSavings3m) > 0.1 THEN 1 ELSE 0 END AS
+          hhSavChgGr10pct3m, CASE WHEN abs (hhDDA3mDiff / hhDDA3m) > 0.1 THEN 1 ELSE 0 END AS
+          hhDDAChgGr10pct3m from balancechange_df9"
+
+        - name : balancechange_Final
+          sql : "SELECT * from balancechange_df5 left join balancechange_df10 on balancechange_df5.mdm_key = 
+          balancechange_df10.mdm"
+
+    - featurename: life_event
+      version : 1
+      status : 1
+      queries : 
+
+        - name : life_Event_childflag_df1
+          sql : "SELECT mdm_key, cif_hloc_key, hive_load_date as hive_load_date, curr_bal_dda, curr_bal_sav
+          FROM arlhd01q_arl_idl.customer_rltnshp_aggregated WHERE  hive_load_date = '2023-08-02'
+          OR hive_load_date = add_months(to_date('2023-08-02'), -3)"
+
+        - name : life_Event_childflag_df2
+          sql : "SLECT DISTINCT A.mdm_key as mdm, to_date(B.time_period, 'ddMMMyyyy') as time_period,
+          sv_bal as sav_bal_hh, dd_bal as dd_bal_hh, income_na, income_19,income_20_39,income_40_74,income_75_124,
+          income_125, married_na, married_1m, married_1s, child_yes FROM lofe_Event_childflag_df1 A
+          LEFT JOIN arlhd01q_arl_stg.chf_details B ON B.rlb_location_key = A.cif_hloc_key WHERE
+          to_date(B.time_period, 'ddMMMyyyy') > '2022-09-29"
+
+        - name : life_Event_childflag_df3
+          sql : "SELECT mdm, first(child_yes) as childrenFlag6m from life_Event_childflag_df2 group by mdm"
+
+        - name : life_Event_childflag_df4
+          sql : "SELECT mdm, last(child_yes) as childrenFlagCurr from life_Event_childflag_df2 group by mdm"
+
+        - name : life_Event_childflag_df5
+          sql : "SELECT mdm, case when child_chg>1 then '1' else '0' end as childrenFlagChange6m from
+          (select mdm, count(distinct(child_yes)) as child_chg from life_Event_childflag_df2 group by mdm)"
+
+        - name : life_Event_childflag_Final
+          sql : "SELECT ch2.mdm as mdm_key, ch3.childrenFlag6m, ch4.childrenFlagCurr, ch5.childrenFlagchange6m
+          from life_Event_childflag_df2 ch2 left join life_Event_childflag_df3 ch3 on ch2.mdm = ch3.mdm
+          left join life_Event_childflag_df4 ch4 on ch3.mdm = ch4.mdm left join life_Event_childflag_Df5
+          ch5 on ch4.mdm = ch5.mdm"
+
+  featureTransformation:
+    featureName:    # map to the column name of a table
+    encoding : 0
+    encodingLogic :  #SQL query to convert string to numeric
+    transformation : 0    
+    transformationLogic :   #SQL query to convert string to numeric
+    handleMissingValue : 0
+    handleMissingValueLogic :  #SQL query  to convert string  to numeric
+
+
+#sink
+
+# finalDatasets : balancechange, lifeEvent
+# database : arlhd01q_arl_idl
+# table : customer_profile_monthly
+# write_mode : overwrite
+# featureSet:
+#   - balancechange
+#   - lofe_Event
+
+# finalDatasetsKeyfield: mdmid
+# writeLogic: "SELECT * from balanceChange_final left join life_Event_childflag_Final using (mdm_key)" #inser query
+
+  feature_dates:
+      - queries:
+        - name: feat_op_date
+          sql: "SELECT max(load_date) from FEAT_OUTPUT"
+          
+        - name: feat_data_date
+          sql: "SELECT max(load_date) from FEAT_DATA"
+
+        - name: fdr_master_date
+          sql: "SELECT max(load_date) from FDR_MASTER"
+
+        - name: fdr_frmt_date
+          sql: "SELECT max(load_date) from FDR_FRMT"
+
+        - name: crf_agg_date
+          sql: "SELECT max(load_date) from CUST_AGG"
+          
+        - name: mdm_date
+          sql: "SELECT max(load_date) from MDM"
+
+
+  featureStore:
+        #merge the final dataframe created in feature generation, take it from feature generation if encoding or transformation else from compute logic
+
+        features:
+          balanceChange
+          lifeEvent
+        featureTable : customer_profile_monthly
+        database : arld01q_arl_idl
+        write_mode : overwrite  #it can append also
+        featureSet:
+        - balanceChange_Final
+        - life_Event_childflag_Final
+        finalDatasetKeyfield : mdmID
+        writeLogic: "SELECT * from balancechange_final left join life_Event_childflag_Final using (mdm_key)" # insert query
+
+sink:
+  offline: 1
+  online: 0
