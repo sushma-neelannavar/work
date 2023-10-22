@@ -1,0 +1,66 @@
+great_expectations init
+
+great_exppectaions 
+
+great_expections suit new 
+
+=========================
+
+should not be negative
+
+price should not be negative
+
+pattern matching - with regex decimal value
+==========================
+
+range > & < or =
+
+there is no functionality to check for greter than equal to or less than equal to, 
+only option to match that is by using between functionality with equal
+
+=======================
+
+FF_PYSCRIPT00** : Main script to process execution.
+FF_YMBUSI00**   : Business case details/SQL’s
+FF_YMCONF00** :  Additional input details.
+
+
+config_file_path = job_args['config_file']
+hive_load_date = job_args['hive_load_date']
+back_fill_month = job_args['back_fill_month']
+
+python main.py --params config_file=common_property.yml hive_load_date='2023-08-02' back_fill_month='3'
+
+
+data profiling along with banking data
+printing statements
+write to local checkpoint
+data profiling
+
+=========================
+regex patterns
+
+email matching = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/
+
+phone number matching = ^[6-9]\d{9}$
+
+==========================
+steps to run gx
+
+great_expectations  init
+
+great_expectations  datasource new
+
+datasource_name = "demo_source"
+
+great_expectations suite new
+
+great_expectations  suite edit bank_expectations (name)
+
+great_expectations checkpoint new data_checkpoint (name)
+
+
+
+
+
+
