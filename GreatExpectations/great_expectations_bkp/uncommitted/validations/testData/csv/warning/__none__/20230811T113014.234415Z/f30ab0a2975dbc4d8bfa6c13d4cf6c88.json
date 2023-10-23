@@ -1,0 +1,130 @@
+{
+  "evaluation_parameters": {},
+  "meta": {
+    "active_batch_definition": {
+      "batch_identifiers": {},
+      "data_asset_name": "testData1.csv",
+      "data_connector_name": "default_inferred_data_connector_name",
+      "datasource_name": "C:\\Users\\sushma.n\\OneDrive - Incedo Technology Solutions Ltd\\Desktop\\Assignments\\GreatExpectations\\data"
+    },
+    "batch_markers": {
+      "ge_load_time": "20230811T113014.288512Z",
+      "pandas_data_fingerprint": "f69b8cc4bc3a79fdc38bfe58c2bcc0f9"
+    },
+    "batch_spec": {
+      "path": "C:\\Users\\sushma.n\\OneDrive - Incedo Technology Solutions Ltd\\Desktop\\Assignments\\GreatExpectations\\great_expectations\\..\\data\\testData1.csv"
+    },
+    "checkpoint_id": null,
+    "checkpoint_name": "testData1.csv_testData.csv.warning",
+    "expectation_suite_name": "testData.csv.warning",
+    "great_expectations_version": "0.17.8",
+    "run_id": {
+      "run_name": null,
+      "run_time": "2023-08-11T17:00:14.234415+05:30"
+    },
+    "validation_id": null,
+    "validation_time": "20230811T113014.431170Z"
+  },
+  "results": [
+    {
+      "exception_info": {
+        "exception_message": null,
+        "exception_traceback": null,
+        "raised_exception": false
+      },
+      "expectation_config": {
+        "expectation_type": "expect_table_row_count_to_be_between",
+        "kwargs": {
+          "batch_id": "f30ab0a2975dbc4d8bfa6c13d4cf6c88",
+          "max_value": 10000,
+          "min_value": 10000
+        },
+        "meta": {
+          "profiler_details": {
+            "metric_configuration": {
+              "domain_kwargs": {},
+              "metric_name": "table.row_count",
+              "metric_value_kwargs": null
+            },
+            "num_batches": 1
+          }
+        }
+      },
+      "meta": {},
+      "result": {
+        "observed_value": 10000
+      },
+      "success": true
+    },
+    {
+      "exception_info": {
+        "exception_message": null,
+        "exception_traceback": null,
+        "raised_exception": false
+      },
+      "expectation_config": {
+        "expectation_type": "expect_table_columns_to_match_set",
+        "kwargs": {
+          "batch_id": "f30ab0a2975dbc4d8bfa6c13d4cf6c88",
+          "column_set": [
+            "passenger_count",
+            "improvement_surcharge",
+            "mta_tax",
+            "dropoff_datetime",
+            "extra",
+            "total_amount",
+            "fare_amount",
+            "rate_code_id",
+            "payment_type",
+            "pickup_datetime",
+            "tip_amount",
+            "congestion_surcharge",
+            "tolls_amount",
+            "pickup_location_id",
+            "store_and_fwd_flag",
+            "vendor_id",
+            "dropoff_location_id",
+            "trip_distance"
+          ],
+          "exact_match": null
+        },
+        "meta": {
+          "profiler_details": {
+            "success_ratio": 1.0
+          }
+        }
+      },
+      "meta": {},
+      "result": {
+        "observed_value": [
+          "vendor_id",
+          "pickup_datetime",
+          "dropoff_datetime",
+          "passenger_count",
+          "trip_distance",
+          "rate_code_id",
+          "store_and_fwd_flag",
+          "pickup_location_id",
+          "dropoff_location_id",
+          "payment_type",
+          "fare_amount",
+          "extra",
+          "mta_tax",
+          "tip_amount",
+          "tolls_amount",
+          "improvement_surcharge",
+          "total_amount",
+          "congestion_surcharge"
+        ]
+      },
+      "success": true
+    }
+  ],
+  "statistics": {
+    "evaluated_expectations": 2,
+    "success_percent": 100.0,
+    "successful_expectations": 2,
+    "unsuccessful_expectations": 0
+  },
+  "success": true
+}

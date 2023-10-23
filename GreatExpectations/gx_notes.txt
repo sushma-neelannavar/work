@@ -1,0 +1,82 @@
+Great Expectations
+
+-- ensure the quality, accuracy, and completeness of the data
+-- 
+
+https://www.kdnuggets.com/2023/03/data-quality-dimensions-assuring-data-quality-great-expectations.html
+
+https://medium.com/@seckindinc/data-validation-documentation-and-profiling-with-great-expectations-c7d05690c690
+
+
+https://github.com/datarootsio/tutorial-great-expectations/blob/main/tutorial_great_expectations.ipynb
+
+referred -- https://khuyentran1401.github.io/reproducible-data-science/testing_data/great_expectations.html
+
+how to show the great expectations result in html page in python
+
+https://docs.greatexpectations.io/docs/guides/expectations/how_to_create_and_edit_expectations_based_on_domain_knowledge_without_inspecting_data_directly/
+
+https://www.kdnuggets.com/2023/01/overcome-data-quality-issues-great-expectations.html
+
+https://senthilnayagan.com/data-quality/2023/gx-takes-great-care-with-data-quality
+
+
+https://aetperf.github.io/2021/09/03/Built-in-Expectations-in-Great-Expectations.html
+
+https://ajithshetty28.medium.com/expecting-great-from-great-expectations-dda10ce4bf6f
+
+
+Demo:
+
+Points Captured during Great Expectations Demo:
+
+1. Donna raised a question if the data quality check can be done for data type of the column
+2. Do we have schema check validation - Yes
+3. Can it be integrated at any stage of the data pipeline - Yes can be integrated from raw to stage and stage to destination
+4. How fast it is in processing large set of data - since it supports both pandas and pyspark volume of data is not a constaine
+5. Can a same expectation be used for different tables for validations - Yes, have to write expectations specific to that table
+6. test suits can be edited and run at any point of the pipeline
+7. Can be integrated with the existing pipelines and get the data check result in UI
+8. We can also push html output git and can verify the data validation
+9. Can we place the code in production? -- Prod does not support Pandas-- in that case we can use the Pyspark 
+10. Can it handle missing value ? - No
+11. Should implement it with some array structured tables as a future enhancement
+12. Data completeness
+
+Actions:
+1.	Check the great expectation library  support on pnc env. – shiva, sunil
+2.	Set up call with Donna to identify use case  - shiva
+3.	Share the ETA for  the use case  identified in #2- shiva
+
+
+=========================================================
+
+
+https://stackoverflow.com/questions/68800235/great-expectations-run-validation-over-specific-subset-of-a-postgresql-table
+
+
+To create a checkpoint you should run the great_expectations checkpoint new command from your terminal. 
+After creating it, you should add the "query" field inside the .yml file that is your checkpoint.
+
+
+
+DB implementations
+
+https://www.dolthub.com/blog/2021-06-15-great-expectations-plus-dolt/   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
