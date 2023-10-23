@@ -1,0 +1,6 @@
+end_date: 01-08-2023
+mode: online
+sql_script: SELECT * FROM Transaction WHERE CREATED BETWEEN 31-07-2023 AND 01-08-2023
+  AND State = New Jersey AND Mode = online
+start_date: 31-07-2023
+state: New Jersey
